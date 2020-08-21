@@ -2,9 +2,13 @@
 #include "esp_wifi.h"
 #include "esp_system.h"
 #include "esp_event.h"
-#include "esp_event_loop.h"
 #include "nvs_flash.h"
 #include "driver/gpio.h"
+#include "esp_log.h"
+
+#include "app_connect.h"
+
+static const char *TAG = "sisbarc-common";
 
 esp_err_t event_handler(void *ctx, system_event_t *event) {
     return ESP_OK;
@@ -28,6 +32,10 @@ void app_main(void) {
     ESP_ERROR_CHECK( esp_wifi_set_config(WIFI_IF_STA, &sta_config) );
     ESP_ERROR_CHECK( esp_wifi_start() );
     ESP_ERROR_CHECK( esp_wifi_connect() );
+
+    if(app_connect() == ESP_OK)
+    	if(app_disconnect() == ESP_OK)
+    		ESP_LOGI(TAG, "As funcionalidade app_connect e app_disconnect foram executadas com sucesso!!!");
 
     gpio_set_direction(GPIO_NUM_4, GPIO_MODE_OUTPUT);
     int level = 0;
