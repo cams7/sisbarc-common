@@ -27,8 +27,6 @@
 #define CONNECTED_BITS (GOT_IPV4_BIT)
 #endif
 
-static const char *TAG = "app_connect";
-
 static EventGroupHandle_t s_app_connect_event_group;
 
 static esp_netif_t *s_app_esp_netif = NULL;
@@ -63,13 +61,13 @@ esp_err_t app_connect(void) {
 
 	ESP_ERROR_CHECK(esp_register_shutdown_handler(&stop));
 
-	ESP_LOGI(TAG, "Waiting for IP");
+	ESP_LOGI(APP_CONNECT_TAG, "Waiting for IP");
 	xEventGroupWaitBits(s_app_connect_event_group, CONNECTED_BITS, true, true, portMAX_DELAY);
 
-	ESP_LOGI(TAG, "Connected to %s", s_connection_name);
-	ESP_LOGI(TAG, "IPv4 address: " IPSTR, IP2STR(&s_ip_addr));
+	ESP_LOGI(APP_CONNECT_TAG, "Connected to %s", s_connection_name);
+	ESP_LOGI(APP_CONNECT_TAG, "IPv4 address: " IPSTR, IP2STR(&s_ip_addr));
 #ifdef CONFIG_APP_CONNECT_IPV6
-    ESP_LOGI(TAG, "IPv6 address: " IPV6STR, IPV62STR(s_ipv6_addr));
+    ESP_LOGI(APP_CONNECT_TAG, "IPv6 address: " IPV6STR, IPV62STR(s_ipv6_addr));
 #endif
 
 	return ESP_OK;
@@ -84,7 +82,7 @@ esp_err_t app_disconnect(void) {
 
 	stop();
 
-	ESP_LOGI(TAG, "Disconnected from %s", s_connection_name);
+	ESP_LOGI(APP_CONNECT_TAG, "Disconnected from %s", s_connection_name);
 	s_connection_name = NULL;
 
 	return ESP_OK;
@@ -115,7 +113,7 @@ static void start(void) {
 			.password = CONFIG_APP_WIFI_PASSWORD,
 		},
 	};
-	ESP_LOGI(TAG, "Connecting to %s...", wifi_config.sta.ssid);
+	ESP_LOGI(APP_CONNECT_TAG, "Connecting to %s...", wifi_config.sta.ssid);
 	ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
 	ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config));
 	ESP_ERROR_CHECK(esp_wifi_start());
@@ -147,7 +145,7 @@ static void on_wifi_disconnect(void *arg, esp_event_base_t event_base, int32_t e
 	xEventGroupClearBits(s_app_connect_event_group, GOT_IPV6_BIT);
 #endif
 
-	ESP_LOGI(TAG, "Wi-Fi disconnected, trying to reconnect...");
+	ESP_LOGI(APP_CONNECT_TAG, "Wi-Fi disconnected, trying to reconnect...");
 	esp_err_t err = esp_wifi_connect();
 	if (err == ESP_ERR_WIFI_NOT_STARTED)
 		return;
@@ -156,7 +154,7 @@ static void on_wifi_disconnect(void *arg, esp_event_base_t event_base, int32_t e
 }
 
 static void on_got_ip(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data) {
-	ESP_LOGI(TAG, "Got IP event!");
+	ESP_LOGI(APP_CONNECT_TAG, "Got IP event!");
 	ip_event_got_ip_t *event = (ip_event_got_ip_t *)event_data;
 	memcpy(&s_ip_addr, &event->ip_info.ip, sizeof(s_ip_addr));
 	xEventGroupSetBits(s_app_connect_event_group, GOT_IPV4_BIT);
@@ -170,10 +168,10 @@ static void on_wifi_connect(void *arg, esp_event_base_t event_base, int32_t even
 static void on_got_ipv6(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data) {
 	ip_event_got_ip6_t *event = (ip_event_got_ip6_t *)event_data;
 	if (event->esp_netif != s_app_esp_netif) {
-		ESP_LOGD(TAG, "Got IPv6 from another netif: ignored");
+		ESP_LOGD(APP_CONNECT_TAG, "Got IPv6 from another netif: ignored");
 		return;
 	}
-	ESP_LOGI(TAG, "Got IPv6 event!");
+	ESP_LOGI(APP_CONNECT_TAG, "Got IPv6 event!");
 	memcpy(&s_ipv6_addr, &event->ip6_info.ip, sizeof(s_ipv6_addr));
 	xEventGroupSetBits(s_app_connect_event_group, GOT_IPV6_BIT);
 }

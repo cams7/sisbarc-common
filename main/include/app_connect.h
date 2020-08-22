@@ -13,6 +13,8 @@ extern "C" {
 
 #include "esp_err.h"
 
+#define APP_CONNECT_TAG "app_connect"
+
 esp_err_t app_connect(void);
 
 esp_err_t app_disconnect(void);
