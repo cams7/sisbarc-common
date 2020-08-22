@@ -1,4 +1,4 @@
-menu "Application Connection Configuration"
+menu "SISBARC-COMMON Configuration"
     config APP_WIFI_SSID
         string "WiFi SSID"
         default "Magalhaes"

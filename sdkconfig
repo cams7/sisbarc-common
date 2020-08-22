@@ -119,12 +119,12 @@ CONFIG_PARTITION_TABLE_MD5=y
 # end of Partition Table
 
 #
-# Application Connection Configuration
+# SISBARC-COMMON Configuration
 #
 CONFIG_APP_WIFI_SSID="Magalhaes"
 CONFIG_APP_WIFI_PASSWORD="C@tarin@"
 CONFIG_APP_CONNECT_IPV6=y
-# end of Application Connection Configuration
+# end of SISBARC-COMMON Configuration
 
 #
 # Compiler options
