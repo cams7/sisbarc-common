@@ -11,6 +11,7 @@
 extern "C" {
 #endif
 
+#include "float.h"
 #include "esp_log.h"
 #include "cJSON.h"
 
@@ -25,9 +26,16 @@ extern "C" {
         }                                                                                              \
     } while (0)
 
-#define JSON_GET_INT(object, string) (cJSON_GetObjectItem(object, string) != NULL ? cJSON_GetObjectItem(object, string)->valueint : -1)
-#define JSON_GET_DOUBLE(object, string) (cJSON_GetObjectItem(object, string) != NULL ? cJSON_GetObjectItem(object, string)->valuedouble : -1)
-#define JSON_GET_STRING(object, string) (cJSON_GetObjectItem(object, string) != NULL ? cJSON_GetObjectItem(object, string)->valuestring : NULL)
+#define JSON_ATTR_FALSE 0
+#define JSON_ATTR_TRUE 1
+
+#define JSON_INT_ATTR_NOTFOUND INT_MIN
+#define JSON_DOUBLE_ATTR_NOTFOUND DBL_MIN
+#define JSON_STRING_ATTR_NOTFOUND NULL
+
+#define JSON_GET_INT(object, string) (cJSON_GetObjectItem(object, string) != NULL ? cJSON_GetObjectItem(object, string)->valueint : JSON_INT_ATTR_NOTFOUND)
+#define JSON_GET_DOUBLE(object, string) (cJSON_GetObjectItem(object, string) != NULL ? cJSON_GetObjectItem(object, string)->valuedouble : JSON_DOUBLE_ATTR_NOTFOUND)
+#define JSON_GET_STRING(object, string) (cJSON_GetObjectItem(object, string) != NULL ? cJSON_GetObjectItem(object, string)->valuestring : JSON_STRING_ATTR_NOTFOUND)
 
 #ifdef __cplusplus
 }
