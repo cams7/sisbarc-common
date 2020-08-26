@@ -13,7 +13,7 @@
 #define SISBARC_COMMON_TAG "sisbarc-common"
 
 esp_err_t check_led_level(bool *level) {
-	APP_ERROR_CHECK(*level, "Error: LED is off", err_led_off);
+	APP_ERROR_CHECK_WITH_MSG(*level, "Error: LED is off", err_led_off);
 	return ESP_OK;
 err_led_off:
 	return ESP_ERR_INVALID_RESPONSE;
