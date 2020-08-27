@@ -15,6 +15,12 @@ extern "C" {
 #include "esp_log.h"
 #include "cJSON.h"
 
+#ifdef CONFIG_IDF_TARGET_ESP32
+#define CHIP_NAME "ESP32"
+#else
+#define CHIP_NAME "UNKNOWN"
+#endif
+
 #define APP_COMMON_TAG "app_common"
 
 #define APP_ERROR_CHECK_WITH_MSG(valid, message, goto_tag, ...)                                        \
