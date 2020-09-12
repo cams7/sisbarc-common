@@ -15,13 +15,13 @@ extern "C" {
 #include "esp_log.h"
 #include "cJSON.h"
 
+#define APP_COMMON_TAG "app_common"
+
 #ifdef CONFIG_IDF_TARGET_ESP32
 #define CHIP_NAME "ESP32"
 #else
 #define CHIP_NAME "UNKNOWN"
 #endif
-
-#define APP_COMMON_TAG "app_common"
 
 #define APP_ERROR_CHECK_WITH_MSG(valid, message, goto_tag, ...)                                        \
     do {                                                                                               \
@@ -54,6 +54,8 @@ extern "C" {
 #define JSON_GET_INT(object, string) (cJSON_GetObjectItem(object, string) != NULL ? cJSON_GetObjectItem(object, string)->valueint : JSON_INT_ATTR_NOTFOUND)
 #define JSON_GET_DOUBLE(object, string) (cJSON_GetObjectItem(object, string) != NULL ? cJSON_GetObjectItem(object, string)->valuedouble : JSON_DOUBLE_ATTR_NOTFOUND)
 #define JSON_GET_STRING(object, string) (cJSON_GetObjectItem(object, string) != NULL ? cJSON_GetObjectItem(object, string)->valuestring : JSON_STRING_ATTR_NOTFOUND)
+
+#define CHECK_FILE_EXTENSION(filename, ext) (strcasecmp(&filename[strlen(filename) - strlen(ext)], ext) == 0)
 
 #ifdef __cplusplus
 }

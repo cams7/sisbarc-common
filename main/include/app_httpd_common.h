@@ -15,6 +15,8 @@ extern "C" {
 #include "esp_http_server.h"
 #include "cJSON.h"
 
+#define APP_HTTPD_COMMON_TAG "app_httpd_common"
+
 #define CONTENT_TYPE_TEXT_PLAIN "text/plain"
 #define CONTENT_TYPE_TEXT_HTML  "text/html"
 #define CONTENT_TYPE_TEXT_XML   "text/xml"
@@ -37,8 +39,6 @@ extern "C" {
 
 #define FILE_PATH_MAX (ESP_VFS_PATH_MAX + 128)
 #define SCRATCH_BUFSIZE (10240)
-
-#define APP_HTTPD_COMMON_TAG "app_httpd_common"
 
 typedef struct rest_server_context {
     char base_path[ESP_VFS_PATH_MAX + 1];
@@ -65,6 +65,8 @@ bool validateBetweenIntVal(cJSON *resp_json_err, const char* attr, const int* va
 bool validateBoolVal(cJSON *resp_json_err, const char* attr, const int* val);
 
 int getAttrIntVal(cJSON *req_json_data, cJSON *resp_json_err, const char* attr, validation_type validationType, bool isOk, bool *hasError, const uint8_t total_args, ...);
+
+esp_err_t common_handler(httpd_req_t *req);
 
 #ifdef __cplusplus
 }
